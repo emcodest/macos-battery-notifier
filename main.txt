@@ -1,0 +1,32 @@
+package main
+
+import (
+	"time"
+
+	"github.com/getlantern/systray"
+)
+
+func main() {
+	systray.Run(onReady, onExit)
+}
+
+func onReady() {
+
+	systray.SetIcon(greenBatteryIcon)
+	systray.SetTooltip("Battery Monitor")
+	mQuit := systray.AddMenuItem("Quit", "Quit the app")
+
+	go func() {
+		for {
+			// call your checkBattery() here
+			time.Sleep(5 * time.Minute)
+		}
+	}()
+
+	go func() {
+		<-mQuit.ClickedCh
+		systray.Quit()
+	}()
+}
+
+func onExit() {}
